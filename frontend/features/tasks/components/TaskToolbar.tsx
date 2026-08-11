@@ -2,7 +2,12 @@
 
 import { Search, Columns3, Funnel, Plus } from "lucide-react";
 
-export default function TaskToolbar() {
+
+type TaskToolbarProps={
+  onAddTask:()=>void;
+}
+
+export default function TaskToolbar({onAddTask}:TaskToolbarProps) {
   return (
     <div className="flex h-8 items-center justify-between">
       {/* left side text */}
@@ -41,10 +46,11 @@ export default function TaskToolbar() {
         {/* add task */}
         <button
           type="button"
+          onClick={onAddTask}
           className="flex h-8 items-center gap-1.5 rounded-md bg-[#171717] px-3 text-xs text-white"
         >
           <Plus className="size-3.5" />
-          <span>Add Task</span>
+          <span>Add Task </span>
         </button>
       </div>
     </div>
