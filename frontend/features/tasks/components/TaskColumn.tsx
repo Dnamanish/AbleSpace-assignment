@@ -4,17 +4,26 @@ import type { Task } from "../types";
 import { MoreHorizontal } from "lucide-react";
 import TaskCard from "./TaskCard";
 
-
 type TaskColumnProps = {
   title: string;
   tasks: Task[];
   onAddTask: () => void;
+  onDeleteTask: (id: number) => void;
+  onEditTask: (task: Task) => void;
+  showMembers: boolean;
+  showDueDate: boolean;
+  showLabels: boolean;
 };
 
 export default function TaskColumn({
   title,
   tasks,
   onAddTask,
+  onDeleteTask,
+  onEditTask,
+  showMembers,
+  showDueDate,
+  showLabels,
 }: TaskColumnProps) {
   return (
     <div className="w-[289px] shrink-0 rounded-lg bg-[#F5F5F5]">
@@ -55,10 +64,12 @@ export default function TaskColumn({
           .map((task) => (
             <TaskCard
               key={task.id}
-              title={task.title}
-              assignee={task.assignee}
-              date={task.date}
-              tags={task.tags}
+              task={task}
+              onEdit={onEditTask}
+              onDelete={() => onDeleteTask(task.id)}
+              showMembers={showMembers}
+              showDueDate={showDueDate}
+              showLabels={showLabels}
             />
           ))}
       </div>

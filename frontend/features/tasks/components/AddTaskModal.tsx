@@ -1,48 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Task } from "../types";
 
 type AddTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onAddTask: (task: Task) => void;
+  onSaveTask: (task: Task) => void;
+  defaultStatus: string;
+  editingTask: Task | null;
 };
 
 export default function AddTaskModal({
   isOpen,
   onClose,
-  onAddTask,
+  onSaveTask,
+  defaultStatus,
+  editingTask,
 }: AddTaskModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("To Do");
   const [priority, setPriority] = useState("No Priority");
   const [dueDate, setDueDate] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (isOpen) setStatus(defaultStatus);
+  }, [isOpen, defaultStatus]);
+
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(editingTask.title);
+      setDescription(editingTask.description ?? "");
+      setStatus(editingTask.status);
+      setPriority(editingTask.priority ?? "No Priority");
+      setDueDate(editingTask.dueDate);
+      setTags(editingTask.tags);
+    }
+  }, [editingTask]);
 
   const handleSubmit = () => {
-    const newTask: Task = {
-      id: Date.now(),
+    const savedTask: Task = {
+      id: editingTask ? editingTask.id : Date.now(),
       title,
       description,
-      assignee: "Admin",
+      assignee: editingTask ? editingTask.assignee : "Admin",
       date: new Date(dueDate).toLocaleDateString("en-GB", {
         day: "numeric",
         month: "short",
       }),
-      tags: [],
+      dueDate,
+      tags,
       status,
       priority,
     };
 
-    onAddTask(newTask);
+    onSaveTask(savedTask);
 
     setTitle("");
     setDescription("");
-    setStatus("To Do");
     setPriority("No Priority");
     setDueDate("");
-
+    setTags([]);
     onClose();
   };
 
@@ -52,7 +72,9 @@ export default function AddTaskModal({
       <div className="w-[560px] rounded-2xl bg-white shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b px-6 py-5">
-          <h2 className="text-xl font-semibold">Add Task</h2>
+          <h2 className="text-xl font-semibold">
+            {editingTask ? "Edit Task" : "Add Task"}
+          </h2>
 
           <button
             type="button"
@@ -88,6 +110,37 @@ export default function AddTaskModal({
               onChange={(e) => setDescription(e.target.value)}
               className="h-24 w-full resize-none rounded-md border px-3 py-3 outline-none"
             />
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {[
+              "Deployment",
+              "Testing Passed",
+              "Updated",
+              "Audit Scheduled",
+              "Review",
+              "Optimization",
+              "Research",
+            ].map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => {
+                  setTags((currentTags) =>
+                    currentTags.includes(tag)
+                      ? currentTags.filter((currentTag) => currentTag !== tag)
+                      : [...currentTags, tag],
+                  );
+                }}
+                className={`rounded-full border px-3 py-1 text-sm ${
+                  tags.includes(tag)
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
           </div>
 
           {/* Status + Priority */}
@@ -151,7 +204,7 @@ export default function AddTaskModal({
             onClick={handleSubmit}
             className="rounded-lg bg-black px-5 py-2 text-sm text-white"
           >
-            Add Task
+            {editingTask ? "Save Changes" : "Add Task"}
           </button>
         </div>
       </div>

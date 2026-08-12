@@ -5,10 +5,23 @@ import { Task } from "../types";
 
 type TaskBoardProps = {
   tasks: Task[];
-  onAddTask: () => void;
+  onAddTask: (status: string) => void;
+  onDeleteTask: (id: number) => void;
+  onEditTask: (task: Task) => void;
+  showMembers: boolean;
+  showDueDate: boolean;
+  showLabels: boolean;
 };
 
-export default function TaskBoard({ tasks, onAddTask }: TaskBoardProps) {
+export default function TaskBoard({
+  tasks,
+  onAddTask,
+  onDeleteTask,
+  onEditTask,
+  showMembers,
+  showDueDate,
+  showLabels,
+}: TaskBoardProps) {
   const columns = ["To Do", "Doing", "Completed", "On Hold"];
 
   return (
@@ -20,7 +33,12 @@ export default function TaskBoard({ tasks, onAddTask }: TaskBoardProps) {
             key={column}
             title={column}
             tasks={tasks}
-            onAddTask={onAddTask}
+            onAddTask={() => onAddTask(column)}
+            onDeleteTask={onDeleteTask}
+            onEditTask={onEditTask}
+            showMembers={showMembers}
+            showDueDate={showDueDate}
+            showLabels={showLabels}
           />
         ))}
       </div>
