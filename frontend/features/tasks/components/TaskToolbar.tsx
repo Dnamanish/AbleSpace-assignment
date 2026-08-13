@@ -14,6 +14,8 @@ type TaskToolbarProps = {
   showMembers: boolean;
   showDueDate: boolean;
   showLabels: boolean;
+  onChangeView: (view: "board" | "list") => void;
+  viewMode: "board" | "list";
 };
 
 export default function TaskToolbar({
@@ -27,6 +29,8 @@ export default function TaskToolbar({
   showMembers,
   showDueDate,
   showLabels,
+  onChangeView,
+  viewMode,
 }: TaskToolbarProps) {
   const [isSearching, setIsSearching] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -143,6 +147,29 @@ export default function TaskToolbar({
               </select>
             </div>
           )}
+        </div>
+
+        {/* View Mode */}
+        <div className="flex h-8 overflow-hidden rounded-md border border-[#E5E5E5]">
+          <button
+            type="button"
+            onClick={() => onChangeView("list")}
+            className={`px-3 text-xs ${
+              viewMode === "list" ? "bg-[#F5F5F5] font-medium" : ""
+            }`}
+          >
+            List
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onChangeView("board")}
+            className={`px-3 text-xs ${
+              viewMode === "board" ? "bg-[#F5F5F5] font-medium" : ""
+            }`}
+          >
+            Board
+          </button>
         </div>
 
         {/* Add Task */}

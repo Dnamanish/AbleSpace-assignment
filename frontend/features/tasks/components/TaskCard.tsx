@@ -4,6 +4,7 @@ import Image from "next/image";
 import { MoreHorizontal, CalendarDays, Tag } from "lucide-react";
 import { useState } from "react";
 import { Task } from "../types";
+import { useRouter } from "next/navigation";
 
 type TaskCardProps = {
   task: Task;
@@ -14,6 +15,8 @@ type TaskCardProps = {
   showLabels: boolean;
 };
 
+
+
 export default function TaskCard({
   task,
   onEdit,
@@ -23,9 +26,13 @@ export default function TaskCard({
   showLabels,
 }: TaskCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
 
   return (
-    <div className="w-[273px] rounded-xl border border-[#E5E5E5] bg-white p-3">
+    <div
+      className="w-[273px] rounded-xl border border-[#E5E5E5] bg-white p-3"
+      onClick={() => router.push(`/tasks/${task.id}`)}
+    >
       {/* Title row */}
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-base font-medium leading-5">{task.title}</h3>
@@ -33,8 +40,10 @@ export default function TaskCard({
         <div className="relative">
           <button
             type="button"
-            aria-label="Task actions"
-            onClick={() => setMenuOpen((current) => !current)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuOpen((current) => !current);
+            }}
             className="flex size-5 shrink-0 items-center justify-center"
           >
             <MoreHorizontal className="size-4" />
@@ -44,7 +53,10 @@ export default function TaskCard({
             <div className="absolute right-0 top-6 z-20 w-28 rounded-md border bg-white p-1 shadow-md">
               <button
                 type="button"
-                onClick={() => onEdit(task)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(task);
+                }}
                 className="w-full rounded px-2 py-1.5 text-left text-sm hover:bg-gray-100"
               >
                 Edit
@@ -52,7 +64,10 @@ export default function TaskCard({
 
               <button
                 type="button"
-                onClick={onDelete}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
                 className="w-full rounded px-2 py-1.5 text-left text-sm text-red-500 hover:bg-gray-100"
               >
                 Delete

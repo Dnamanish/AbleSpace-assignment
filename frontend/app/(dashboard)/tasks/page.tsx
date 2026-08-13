@@ -5,6 +5,8 @@ import TaskBoard from "@/features/tasks/components/TaskBoard";
 import TaskToolbar from "@/features/tasks/components/TaskToolbar";
 import AddTaskModal from "@/features/tasks/components/AddTaskModal";
 import type { Task } from "@/features/tasks/types";
+import TaskList from "@/features/tasks/components/TaskList";
+import { initialTasks } from "@/features/tasks/data";
 
 export default function TasksPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,42 +19,9 @@ export default function TasksPage() {
   const [showDueDate, setShowDueDate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
   const [showMembers, setShowMembers] = useState(true);
+  const [viewMode, setViewMode] = useState<"board" | "list">("board");
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: "Write API Documentation",
-      assignee: "Admin",
-      date: "29 Jul",
-      dueDate: "2026-07-29",
-      tags: ["Deployment", "frontend"],
-      status: "To Do",
-      description: "",
-      priority: "No Priority",
-    },
-    {
-      id: 2,
-      title: "Implement Search Function",
-      assignee: "Admin",
-      date: "29 Jul",
-      dueDate: "2026-07-29",
-      tags: ["Bug", "Deployment"],
-      status: "Doing",
-      description: "",
-      priority: "No Priority",
-    },
-    {
-      id: 3,
-      title: "Deploy to Production",
-      assignee: "Admin",
-      date: "29 Jul",
-      dueDate: "2026-07-29",
-      tags: ["Deployment", "Deployment"],
-      status: "Completed",
-      description: "",
-      priority: "No Priority",
-    },
-  ]);
 
   const openModal = (status: string = "To Do") => {
     setSelectedStatus(status);
@@ -109,27 +78,38 @@ export default function TasksPage() {
       <TaskToolbar
         onAddTask={() => openModal()}
         onSearch={setSearchQuery}
-
         onFilterStatus={setFilterStatus}
         onFilterPriority={setFilterPriority}
-
         onToggleMembers={() => setShowMembers((current) => !current)}
         onToggleDueDate={() => setShowDueDate((current) => !current)}
         onToggleLabels={() => setShowLabels((current) => !current)}
-        
         showMembers={showMembers}
         showDueDate={showDueDate}
         showLabels={showLabels}
+        onChangeView={setViewMode}
+        viewMode={viewMode}
       />
-      <TaskBoard
-        tasks={filteredTasks}
-        onAddTask={openModal}
-        onDeleteTask={deleteTask}
-        onEditTask={editTask}
-        showMembers={showMembers}
-        showDueDate={showDueDate}
-        showLabels={showLabels}
-      />
+      {viewMode === "board" ? (
+        <TaskBoard
+          tasks={filteredTasks}
+          onAddTask={openModal}
+          onDeleteTask={deleteTask}
+          onEditTask={editTask}
+          showMembers={showMembers}
+          showDueDate={showDueDate}
+          showLabels={showLabels}
+        />
+      ) : (
+        <TaskList
+          tasks={filteredTasks}
+          onAddTask={openModal}
+          onDeleteTask={deleteTask}
+          onEditTask={editTask}
+          showMembers={showMembers}
+          showDueDate={showDueDate}
+          showLabels={showLabels}
+        />
+      )}
 
       <AddTaskModal
         isOpen={isModalOpen}
