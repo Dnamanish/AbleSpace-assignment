@@ -17,7 +17,6 @@ export default function TasksPage() {
   const [showDueDate, setShowDueDate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
   const [showMembers, setShowMembers] = useState(true);
-  
 
   const [tasks, setTasks] = useState<Task[]>([
     {
@@ -110,9 +109,14 @@ export default function TasksPage() {
       <TaskToolbar
         onAddTask={() => openModal()}
         onSearch={setSearchQuery}
+
+        onFilterStatus={setFilterStatus}
+        onFilterPriority={setFilterPriority}
+
         onToggleMembers={() => setShowMembers((current) => !current)}
         onToggleDueDate={() => setShowDueDate((current) => !current)}
         onToggleLabels={() => setShowLabels((current) => !current)}
+        
         showMembers={showMembers}
         showDueDate={showDueDate}
         showLabels={showLabels}
