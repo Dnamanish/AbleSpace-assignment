@@ -7,6 +7,7 @@ import AddTaskModal from "@/features/tasks/components/AddTaskModal";
 import type { Task } from "@/features/tasks/types";
 import TaskList from "@/features/tasks/components/TaskList";
 import { initialTasks } from "@/features/tasks/data";
+import { useTasks } from "@/features/tasks/TaskProvider";
 
 export default function TasksPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,8 +21,9 @@ export default function TasksPage() {
   const [showLabels, setShowLabels] = useState(true);
   const [showMembers, setShowMembers] = useState(true);
   const [viewMode, setViewMode] = useState<"board" | "list">("board");
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  // const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
+  const { tasks, saveTask, deleteTask } = useTasks();
 
   const openModal = (status: string = "To Do") => {
     setSelectedStatus(status);
@@ -37,25 +39,29 @@ export default function TasksPage() {
     setIsModalOpen(false);
   };
 
-  const deleteTask = (id: number) => {
-    setTasks((currentTasks) => currentTasks.filter((task) => task.id !== id));
-  };
+  // const deleteTask = (id: number) => {
+  //   setTasks((currentTasks) => currentTasks.filter((task) => task.id !== id));
+  // };
 
-  const saveTask = (task: Task) => {
-    setTasks((currentTasks) => {
-      const exists = currentTasks.some(
-        (currentTask) => currentTask.id === task.id,
-      );
+  // const saveTask = (task: Task) => {
+  //   setTasks((currentTasks) => {
+  //     const exists = currentTasks.some(
+  //       (currentTask) => currentTask.id === task.id,
+  //     );
 
-      if (exists) {
-        return currentTasks.map((currentTask) =>
-          currentTask.id === task.id ? task : currentTask,
-        );
-      }
+  //     if (exists) {
+  //       return currentTasks.map((currentTask) =>
+  //         currentTask.id === task.id ? task : currentTask,
+  //       );
+  //     }
 
-      return [...currentTasks, task];
-    });
+  //     return [...currentTasks, task];
+  //   });
 
+  //   setEditingTask(null);
+  // };
+  const handleSaveTask = (task: Task) => {
+    saveTask(task);
     setEditingTask(null);
   };
 
@@ -114,7 +120,7 @@ export default function TasksPage() {
       <AddTaskModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onSaveTask={saveTask}
+        onSaveTask={handleSaveTask}
         defaultStatus={selectedStatus}
         editingTask={editingTask}
       />

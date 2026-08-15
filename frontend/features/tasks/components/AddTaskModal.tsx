@@ -115,9 +115,11 @@ export default function AddTaskModal({
           <div className="flex flex-wrap gap-2">
             {[
               "Deployment",
-              "Testing Passed",
+              "Testing",
+              "Passed",
               "Updated",
-              "Audit Scheduled",
+              "Audit",
+              "Scheduled",
               "Review",
               "Optimization",
               "Research",

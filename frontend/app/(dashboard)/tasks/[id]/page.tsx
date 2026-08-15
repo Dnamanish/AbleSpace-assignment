@@ -14,15 +14,20 @@ import {
   ChevronDown,
   Settings,
 } from "lucide-react";
-import { initialTasks } from "@/features/tasks/data";
 import { useParams } from "next/navigation";
+import { useTasks } from "@/features/tasks/TaskProvider";
+import { useState } from "react";
 
 export default function TaskDetailPage() {
   const params = useParams();
+  const { tasks, updateTask } = useTasks();
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState<string[]>([]);
 
   const taskId = Number(params.id);
 
-  const task = initialTasks.find((currentTask) => currentTask.id === taskId);
+  const task = tasks.find((currentTask) => currentTask.id === taskId);
+
   if (!task) {
     return <div className="p-6">Task not found.</div>;
   }
@@ -72,6 +77,7 @@ export default function TaskDetailPage() {
                 <span className="flex size-6 items-center justify-center rounded-full bg-gray-100 text-xs">
                   {task.assignee.charAt(0)}
                 </span>
+
                 {task.assignee}
               </span>
 
@@ -111,6 +117,7 @@ export default function TaskDetailPage() {
           <div className="mt-8">
             <div className="mb-3 flex items-center gap-2">
               <ChevronDown className="size-4" />
+
               <h2 className="text-sm font-semibold">Subtasks</h2>
             </div>
 
@@ -172,7 +179,9 @@ export default function TaskDetailPage() {
               <div className="border-b p-4">
                 <div className="flex items-center gap-2 text-sm">
                   <div className="size-7 rounded-full bg-gray-200" />
+
                   <span className="font-medium">Ankit Dutta</span>
+
                   <span className="text-xs text-gray-400">just now</span>
                 </div>
 
@@ -192,14 +201,41 @@ export default function TaskDetailPage() {
               </div>
             </div>
 
-            <div className="mt-3 flex items-center gap-2 rounded-lg border p-3">
-              <input
-                placeholder="Add a comment..."
-                className="flex-1 text-sm outline-none"
-              />
+            <div className="mt-3">
+              {comments.map((item, index) => (
+                <div key={index} className="mb-2 rounded-lg border p-3 text-sm">
+                  {item}
+                </div>
+              ))}
 
-              <Paperclip className="size-4 text-gray-500" />
-              <Send className="size-4 text-gray-500" />
+              <div className="flex items-center gap-2 rounded-lg border p-3">
+                <input
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && comment.trim()) {
+                      setComments((current) => [...current, comment.trim()]);
+                      setComment("");
+                    }
+                  }}
+                  placeholder="Add a comment..."
+                  className="flex-1 text-sm outline-none"
+                />
+
+                <Paperclip className="size-4 text-gray-500" />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!comment.trim()) return;
+
+                    setComments((current) => [...current, comment.trim()]);
+                    setComment("");
+                  }}
+                >
+                  <Send className="size-4 text-gray-500" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -210,6 +246,7 @@ export default function TaskDetailPage() {
             <div className="flex items-center justify-between border-b px-4 py-3">
               <div className="flex items-center gap-2">
                 <ChevronDown className="size-4" />
+
                 <h2 className="text-sm font-semibold">Details</h2>
               </div>
 
@@ -220,18 +257,47 @@ export default function TaskDetailPage() {
             </div>
 
             <div className="space-y-5 p-4 text-sm">
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between">
                 <span className="text-gray-500">Status</span>
-                <span className="text-orange-500">● {task.status}</span>
+
+                <select
+                  value={task.status}
+                  onChange={(e) => {
+                    updateTask(task.id, {
+                      status: e.target.value,
+                    });
+                  }}
+                  className="rounded-md border px-3 py-1.5 text-sm outline-none"
+                >
+                  <option value="To Do">To Do</option>
+                  <option value="Doing">Doing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="On Hold">On Hold</option>
+                </select>
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex items-center justify-between">
                 <span className="text-gray-500">Priority</span>
-                <span className="text-red-500">{task.priority}⌄</span>
+
+                <select
+                  value={task.priority}
+                  onChange={(e) => {
+                    updateTask(task.id, {
+                      priority: e.target.value,
+                    });
+                  }}
+                  className="rounded-md border px-3 py-1.5 text-sm outline-none"
+                >
+                  <option value="No Priority">No Priority</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Members</span>
+
                 <span className="flex items-center gap-1">
                   <Users className="size-3.5" />
                   {task.assignee}
@@ -240,21 +306,58 @@ export default function TaskDetailPage() {
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Dates</span>
+
                 <span className="text-xs">Due {task.dueDate}</span>
               </div>
 
-              <div className="flex justify-between">
+              <div className="flex items-start justify-between gap-4">
                 <span className="text-gray-500">Labels</span>
-                <span>—</span>
+
+                <div className="flex flex-wrap justify-end gap-1">
+                  {task.tags.map((tag) => (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        updateTask(task.id, {
+                          tags: task.tags.filter(
+                            (currentTag) => currentTag !== tag,
+                          ),
+                        });
+                      }}
+                      className="rounded-full bg-gray-100 px-2 py-1 text-xs hover:bg-red-100"
+                    >
+                      {tag} ×
+                    </button>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newTag = window.prompt("Enter label");
+
+                      if (newTag && !task.tags.includes(newTag)) {
+                        updateTask(task.id, {
+                          tags: [...task.tags, newTag],
+                        });
+                      }
+                    }}
+                    className="rounded-full border px-2 py-1 text-xs"
+                  >
+                    + Add
+                  </button>
+                </div>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Teams</span>
+
                 <span>—</span>
               </div>
 
               <div className="flex justify-between">
                 <span className="text-gray-500">Reporter</span>
+
                 <span>—</span>
               </div>
             </div>
