@@ -24,7 +24,7 @@ export default function TaskDetailPage() {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<string[]>([]);
 
-  const taskId = Number(params.id);
+  const taskId = params.id as string;
 
   const task = tasks.find((currentTask) => currentTask.id === taskId);
 

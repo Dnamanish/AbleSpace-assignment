@@ -1,6 +1,7 @@
 import Sidebar from "@/components/shared/Sidebar";
 import Topbar from "@/components/shared/Topbar";
-
+import { TaskProvider } from "@/features/tasks/TaskProvider";
+import { ProjectProvider } from "@/features/projects/ProjectProvider";
 
 export default function DashboardLayout({
   children,
@@ -8,13 +9,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar />
+    <TaskProvider>
+      <ProjectProvider>
+        <div className="flex min-h-screen">
+          <Sidebar />
 
-        <main className="min-w-0 flex-1">{children}</main>
-      </div>
-    </div>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <Topbar />
+
+            <main className="min-w-0 flex-1">{children}</main>
+          </div>
+        </div>
+      </ProjectProvider>
+    </TaskProvider>
   );
 }
