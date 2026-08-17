@@ -106,7 +106,21 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  res.clearCookie("auth-token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+    path: "/",
+  });
+
+  return res.status(200).json({
+    message: "Logged out successfully",
+  });
+};
+
 module.exports = {
   googleLogin,
   getCurrentUser,
+  logout,
 };

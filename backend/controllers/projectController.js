@@ -10,7 +10,9 @@ const formatProject = (project) => ({
 
 const getProjects = async (req, res) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
+    const projects = await Project.find({
+      userId: req.user.userId,
+    }).sort({ createdAt: -1 });
 
     res.status(200).json(projects.map(formatProject));
   } catch (error) {
@@ -24,7 +26,10 @@ const getProjects = async (req, res) => {
 
 const createProject = async (req, res) => {
   try {
-    const project = await Project.create(req.body);
+    const project = await Project.create({
+      ...req.body,
+      userId: req.user.userId,
+    });
 
     res.status(201).json(formatProject(project));
   } catch (error) {
@@ -38,8 +43,11 @@ const createProject = async (req, res) => {
 
 const updateProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(
-      req.params.id,
+    const project = await Project.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.userId,
+      },
       req.body,
       {
         new: true,
@@ -65,7 +73,10 @@ const updateProject = async (req, res) => {
 
 const deleteProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndDelete(req.params.id);
+    const project = await Project.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId,
+    });
 
     if (!project) {
       return res.status(404).json({

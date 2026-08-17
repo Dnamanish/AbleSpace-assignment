@@ -23,7 +23,9 @@ export function ProjectProvider({
   useEffect(() => {
     const loadProjects = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
@@ -52,6 +54,7 @@ export function ProjectProvider({
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(project),
         });
 
@@ -77,6 +80,7 @@ export function ProjectProvider({
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(project),
       });
 
@@ -99,6 +103,7 @@ export function ProjectProvider({
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {

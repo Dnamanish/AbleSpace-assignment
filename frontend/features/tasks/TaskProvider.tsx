@@ -21,10 +21,13 @@ export function TaskProvider({
 }) {
   const [tasks, setTasks] = useState<Task[]>([]);
 
+  // Load tasks
   useEffect(() => {
     const loadTasks = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
@@ -41,18 +44,21 @@ export function TaskProvider({
     loadTasks();
   }, []);
 
+  // Create or update task
   const saveTask = async (task: Task) => {
     try {
       const exists = tasks.some(
         (currentTask) => currentTask.id === task.id,
       );
 
+      // UPDATE
       if (exists) {
         const response = await fetch(`${API_URL}/${task.id}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify(task),
         });
 
@@ -71,11 +77,13 @@ export function TaskProvider({
         return;
       }
 
+      // CREATE
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(task),
       });
 
@@ -91,10 +99,12 @@ export function TaskProvider({
     }
   };
 
+  // Delete task
   const deleteTask = async (id: string) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -109,6 +119,7 @@ export function TaskProvider({
     }
   };
 
+  // Update task
   const updateTask = async (
     id: string,
     updates: Partial<Task>,
@@ -119,6 +130,7 @@ export function TaskProvider({
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(updates),
       });
 

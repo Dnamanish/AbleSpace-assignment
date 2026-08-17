@@ -1,22 +1,24 @@
 const Task = require("../models/Task");
 
+const formatTask = (task) => ({
+  id: task._id.toString(),
+  title: task.title,
+  description: task.description,
+  assignee: task.assignee,
+  date: task.date,
+  dueDate: task.dueDate,
+  tags: task.tags,
+  status: task.status,
+  priority: task.priority,
+});
+
 const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find().sort({ createdAt: -1 });
+    const tasks = await Task.find({
+      userId: req.user.userId,
+    }).sort({ createdAt: -1 });
 
-    const formattedTasks = tasks.map((task) => ({
-      id: task._id.toString(),
-      title: task.title,
-      description: task.description,
-      assignee: task.assignee,
-      date: task.date,
-      dueDate: task.dueDate,
-      tags: task.tags,
-      status: task.status,
-      priority: task.priority,
-    }));
-
-    res.status(200).json(formattedTasks);
+    res.status(200).json(tasks.map(formatTask));
   } catch (error) {
     console.error("Get tasks error:", error);
 
@@ -28,19 +30,12 @@ const getTasks = async (req, res) => {
 
 const createTask = async (req, res) => {
   try {
-    const task = await Task.create(req.body);
-
-    res.status(201).json({
-      id: task._id.toString(),
-      title: task.title,
-      description: task.description,
-      assignee: task.assignee,
-      date: task.date,
-      dueDate: task.dueDate,
-      tags: task.tags,
-      status: task.status,
-      priority: task.priority,
+    const task = await Task.create({
+      ...req.body,
+      userId: req.user.userId,
     });
+
+    res.status(201).json(formatTask(task));
   } catch (error) {
     console.error("Create task error:", error);
 
@@ -52,10 +47,17 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const task = await Task.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.userId,
+      },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
 
     if (!task) {
       return res.status(404).json({
@@ -63,17 +65,7 @@ const updateTask = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      id: task._id.toString(),
-      title: task.title,
-      description: task.description,
-      assignee: task.assignee,
-      date: task.date,
-      dueDate: task.dueDate,
-      tags: task.tags,
-      status: task.status,
-      priority: task.priority,
-    });
+    res.status(200).json(formatTask(task));
   } catch (error) {
     console.error("Update task error:", error);
 
@@ -85,7 +77,10 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
+    const task = await Task.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.userId,
+    });
 
     if (!task) {
       return res.status(404).json({
