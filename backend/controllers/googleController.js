@@ -79,6 +79,34 @@ const googleLogin = async (req, res) => {
   }
 };
 
+// Get currently logged-in user
+const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error("Get current user error:", error);
+
+    return res.status(500).json({
+      message: "Failed to get current user",
+    });
+  }
+};
+
 module.exports = {
   googleLogin,
+  getCurrentUser,
 };
