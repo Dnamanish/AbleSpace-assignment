@@ -44,7 +44,6 @@ export default function ProfilePage() {
         const data = await response.json();
 
         setUser(data.user);
-
         setName(data.user.name || "");
         setTitle(data.user.title || "");
         setUsername(data.user.username || "");
@@ -135,7 +134,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Loading profile...
         </p>
       </div>
@@ -147,7 +146,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-background text-foreground">
       {/* Profile Sidebar */}
       <ProfileSidebar />
 
@@ -158,14 +157,15 @@ export default function ProfilePage() {
             Profile
           </h1>
 
-          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+          {/* Profile Card */}
+          <div className="overflow-hidden rounded-xl border border-border bg-card text-card-foreground">
             {/* Profile picture */}
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-5">
-              <span className="text-sm text-gray-600">
+            <div className="flex items-center justify-between border-b border-border px-5 py-5">
+              <span className="text-sm text-muted-foreground">
                 Profile picture
               </span>
 
-              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-100">
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-muted">
                 <span className="text-sm font-medium">
                   {name.charAt(0).toUpperCase()}
                 </span>
@@ -173,20 +173,20 @@ export default function ProfilePage() {
             </div>
 
             {/* Email */}
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-5">
-              <span className="text-sm text-gray-600">
+            <div className="flex items-center justify-between border-b border-border px-5 py-5">
+              <span className="text-sm text-muted-foreground">
                 Email
               </span>
 
-              <span className="text-sm font-medium text-gray-900">
+              <span className="text-sm font-medium">
                 {user.email}
               </span>
             </div>
 
             {/* Full name */}
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-5">
+            <div className="flex items-center justify-between border-b border-border px-5 py-5">
               <div>
-                <p className="text-sm text-gray-900">
+                <p className="text-sm">
                   Full name
                 </p>
               </div>
@@ -195,18 +195,18 @@ export default function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-52 rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none focus:border-gray-400"
+                className="w-52 rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
               />
             </div>
 
             {/* Title */}
-            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-5">
+            <div className="flex items-center justify-between border-b border-border px-5 py-5">
               <div>
-                <p className="text-sm text-gray-900">
+                <p className="text-sm">
                   Title
                 </p>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   Your job title or role
                 </p>
               </div>
@@ -216,18 +216,18 @@ export default function ProfilePage() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Software Engineer"
-                className="w-52 rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none focus:border-gray-400"
+                className="w-52 rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
               />
             </div>
 
             {/* Username */}
             <div className="flex items-center justify-between px-5 py-5">
               <div>
-                <p className="text-sm text-gray-900">
+                <p className="text-sm">
                   Username
                 </p>
 
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-muted-foreground">
                   One word, like a nickname or first name
                 </p>
               </div>
@@ -237,7 +237,7 @@ export default function ProfilePage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="e.g. manish"
-                className="w-52 rounded-md border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none focus:border-gray-400"
+                className="w-52 rounded-md border border-input bg-background px-4 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
               />
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function ProfilePage() {
           {/* Save */}
           <div className="mt-4 flex items-center justify-end gap-4">
             {message && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {message}
               </p>
             )}
@@ -254,7 +254,7 @@ export default function ProfilePage() {
               type="button"
               onClick={handleSaveProfile}
               disabled={saving}
-              className="rounded-md bg-black px-5 py-2 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-md bg-primary px-5 py-2 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? "Saving..." : "Save changes"}
             </button>
@@ -266,8 +266,8 @@ export default function ProfilePage() {
               Workspace access
             </h2>
 
-            <div className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-5 py-5">
-              <p className="text-sm text-gray-500">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-5">
+              <p className="text-sm text-muted-foreground">
                 Remove yourself from the workspace
               </p>
 
@@ -275,11 +275,9 @@ export default function ProfilePage() {
                 type="button"
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="rounded-md bg-red-50 px-4 py-2 text-sm font-medium text-red-500 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-md bg-destructive/10 px-4 py-2 text-sm font-medium text-destructive transition hover:bg-destructive/20 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {loggingOut
-                  ? "Logging out..."
-                  : "Log out"}
+                {loggingOut ? "Logging out..." : "Log out"}
               </button>
             </div>
           </div>

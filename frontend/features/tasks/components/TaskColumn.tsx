@@ -26,14 +26,16 @@ export default function TaskColumn({
   showLabels,
 }: TaskColumnProps) {
   return (
-    <div className="w-[289px] shrink-0 rounded-lg bg-[#F5F5F5]">
+    <div className="w-[289px] shrink-0 rounded-lg bg-muted text-foreground">
       {/* Column header */}
       <div className="flex h-[39px] items-center justify-between px-3">
         {/* Left side */}
         <div className="flex items-center gap-2">
           <span className="text-sm leading-none">⠿</span>
 
-          <h2 className="text-xs font-semibold">{title}</h2>
+          <h2 className="text-xs font-semibold">
+            {title}
+          </h2>
         </div>
 
         {/* Right side */}
@@ -42,7 +44,7 @@ export default function TaskColumn({
             type="button"
             onClick={onAddTask}
             aria-label={`Add task to ${title}`}
-            className="flex size-5 items-center justify-center rounded"
+            className="flex size-5 items-center justify-center rounded hover:bg-accent"
           >
             <span className="text-sm leading-none">+</span>
           </button>
@@ -50,7 +52,7 @@ export default function TaskColumn({
           <button
             type="button"
             aria-label={`${title} options`}
-            className="flex size-5 items-center justify-center rounded"
+            className="flex size-5 items-center justify-center rounded hover:bg-accent"
           >
             <MoreHorizontal className="size-3.5" />
           </button>
@@ -78,7 +80,7 @@ export default function TaskColumn({
       <button
         type="button"
         onClick={onAddTask}
-        className="flex h-10 w-full items-center gap-2 px-3 text-sm"
+        className="flex h-10 w-full items-center gap-2 rounded-md px-3 text-sm hover:bg-accent"
       >
         <span className="text-lg leading-none">+</span>
         <span>Add Task</span>

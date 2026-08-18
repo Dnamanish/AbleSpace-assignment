@@ -15,8 +15,6 @@ type TaskCardProps = {
   showLabels: boolean;
 };
 
-
-
 export default function TaskCard({
   task,
   onEdit,
@@ -30,12 +28,14 @@ export default function TaskCard({
 
   return (
     <div
-      className="w-[273px] rounded-xl border border-[#E5E5E5] bg-white p-3"
+      className="w-[273px] rounded-xl border border-border bg-card text-card-foreground p-3"
       onClick={() => router.push(`/tasks/${task.id}`)}
     >
       {/* Title row */}
       <div className="flex items-center justify-between gap-2">
-        <h3 className="text-base font-medium leading-5">{task.title}</h3>
+        <h3 className="text-base font-medium leading-5">
+          {task.title}
+        </h3>
 
         <div className="relative">
           <button
@@ -44,20 +44,20 @@ export default function TaskCard({
               e.stopPropagation();
               setMenuOpen((current) => !current);
             }}
-            className="flex size-5 shrink-0 items-center justify-center"
+            className="flex size-5 shrink-0 items-center justify-center rounded hover:bg-accent"
           >
             <MoreHorizontal className="size-4" />
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-6 z-20 w-28 rounded-md border bg-white p-1 shadow-md">
+            <div className="absolute right-0 top-6 z-20 w-28 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit(task);
                 }}
-                className="w-full rounded px-2 py-1.5 text-left text-sm hover:bg-gray-100"
+                className="w-full rounded px-2 py-1.5 text-left text-sm hover:bg-muted"
               >
                 Edit
               </button>
@@ -68,7 +68,7 @@ export default function TaskCard({
                   e.stopPropagation();
                   onDelete();
                 }}
-                className="w-full rounded px-2 py-1.5 text-left text-sm text-red-500 hover:bg-gray-100"
+                className="w-full rounded px-2 py-1.5 text-left text-sm text-red-500 hover:bg-muted"
               >
                 Delete
               </button>
@@ -89,14 +89,18 @@ export default function TaskCard({
               className="size-5 rounded-full"
             />
 
-            <span className="text-[16px] leading-3">{task.assignee}</span>
+            <span className="text-[16px] leading-3">
+              {task.assignee}
+            </span>
           </div>
         )}
 
         {showDueDate && (
-          <div className="flex h-5 w-[67px] items-center justify-center gap-1 rounded-full bg-[#FDE7E7] text-[12px] text-red-500">
+          <div className="flex h-5 w-[67px] items-center justify-center gap-1 rounded-full bg-red-100 text-[12px] text-red-500 dark:bg-red-950/40">
             <CalendarDays className="size-3.5 shrink-0" />
-            <span className="whitespace-nowrap">{task.date}</span>
+            <span className="whitespace-nowrap">
+              {task.date}
+            </span>
           </div>
         )}
       </div>
@@ -107,7 +111,7 @@ export default function TaskCard({
           {task.tags.map((tag, index) => (
             <span
               key={`${tag}-${index}`}
-              className="flex h-5 items-center gap-1 rounded-full bg-[#F5F5F5] px-2 py-1 text-[14px]"
+              className="flex h-5 items-center gap-1 rounded-full bg-muted px-2 py-1 text-[14px] text-muted-foreground"
             >
               <Tag className="size-4" />
               {tag}

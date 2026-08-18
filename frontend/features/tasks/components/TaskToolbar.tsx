@@ -48,15 +48,17 @@ export default function TaskToolbar({
             autoFocus
             placeholder="Search tasks..."
             onChange={(e) => onSearch(e.target.value)}
-            className="h-8 w-48 rounded-md border border-[#E5E5E5] px-2 text-xs outline-none"
+            className="h-8 w-48 rounded-md border border-border bg-background px-2 text-xs text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
           />
         )}
 
         <button
           type="button"
           aria-label="Search tasks"
-          onClick={() => setIsSearching((current) => !current)}
-          className="flex size-8 items-center justify-center rounded-md border border-[#E5E5E5]"
+          onClick={() =>
+            setIsSearching((current) => !current)
+          }
+          className="flex size-8 items-center justify-center rounded-md border border-border bg-background hover:bg-accent"
         >
           <Search className="size-4" />
         </button>
@@ -66,19 +68,24 @@ export default function TaskToolbar({
           <button
             type="button"
             aria-label="Fields"
-            onClick={() => setIsFieldsOpen((current) => !current)}
-            className="flex h-8 items-center gap-1.5 rounded-md border border-[#E5E5E5] px-2 text-xs"
+            onClick={() =>
+              setIsFieldsOpen((current) => !current)
+            }
+            className="flex h-8 items-center gap-1.5 rounded-md border border-border bg-background px-2 text-xs hover:bg-accent"
           >
             <Columns3 className="size-4" />
             <span>Fields</span>
           </button>
 
           {isFieldsOpen && (
-            <div className="absolute right-0 top-10 z-30 w-56 rounded-lg border bg-white p-4 shadow-lg">
-              <p className="mb-3 text-xs font-semibold">Show fields</p>
+            <div className="absolute right-0 top-10 z-30 w-56 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-lg">
+              <p className="mb-3 text-xs font-semibold">
+                Show fields
+              </p>
 
               <label className="flex items-center justify-between py-2 text-sm">
                 Members
+
                 <input
                   type="checkbox"
                   checked={showMembers}
@@ -88,6 +95,7 @@ export default function TaskToolbar({
 
               <label className="flex items-center justify-between py-2 text-sm">
                 Due Date
+
                 <input
                   type="checkbox"
                   checked={showDueDate}
@@ -97,6 +105,7 @@ export default function TaskToolbar({
 
               <label className="flex items-center justify-between py-2 text-sm">
                 Labels
+
                 <input
                   type="checkbox"
                   checked={showLabels}
@@ -112,19 +121,25 @@ export default function TaskToolbar({
           <button
             type="button"
             aria-label="Filter tasks"
-            onClick={() => setIsFilterOpen((current) => !current)}
-            className="flex size-8 items-center justify-center rounded-md border border-[#E5E5E5]"
+            onClick={() =>
+              setIsFilterOpen((current) => !current)
+            }
+            className="flex size-8 items-center justify-center rounded-md border border-border bg-background hover:bg-accent"
           >
             <Funnel className="size-4" />
           </button>
 
           {isFilterOpen && (
-            <div className="absolute right-0 top-10 z-30 w-56 rounded-lg border bg-white p-4 shadow-lg">
-              <p className="mb-2 text-xs font-semibold">Status</p>
+            <div className="absolute right-0 top-10 z-30 w-56 rounded-lg border border-border bg-popover p-4 text-popover-foreground shadow-lg">
+              <p className="mb-2 text-xs font-semibold">
+                Status
+              </p>
 
               <select
-                onChange={(e) => onFilterStatus(e.target.value)}
-                className="mb-4 w-full rounded-md border px-2 py-2 text-sm"
+                onChange={(e) =>
+                  onFilterStatus(e.target.value)
+                }
+                className="mb-4 w-full rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground outline-none"
               >
                 <option value="All">All</option>
                 <option value="To Do">To Do</option>
@@ -133,11 +148,15 @@ export default function TaskToolbar({
                 <option value="On Hold">On Hold</option>
               </select>
 
-              <p className="mb-2 text-xs font-semibold">Priority</p>
+              <p className="mb-2 text-xs font-semibold">
+                Priority
+              </p>
 
               <select
-                onChange={(e) => onFilterPriority(e.target.value)}
-                className="w-full rounded-md border px-2 py-2 text-sm"
+                onChange={(e) =>
+                  onFilterPriority(e.target.value)
+                }
+                className="w-full rounded-md border border-border bg-background px-2 py-2 text-sm text-foreground outline-none"
               >
                 <option value="All">All</option>
                 <option value="No Priority">No Priority</option>
@@ -150,12 +169,14 @@ export default function TaskToolbar({
         </div>
 
         {/* View Mode */}
-        <div className="flex h-8 overflow-hidden rounded-md border border-[#E5E5E5]">
+        <div className="flex h-8 overflow-hidden rounded-md border border-border bg-background">
           <button
             type="button"
             onClick={() => onChangeView("list")}
             className={`px-3 text-xs ${
-              viewMode === "list" ? "bg-[#F5F5F5] font-medium" : ""
+              viewMode === "list"
+                ? "bg-muted font-medium"
+                : "hover:bg-accent"
             }`}
           >
             List
@@ -165,7 +186,9 @@ export default function TaskToolbar({
             type="button"
             onClick={() => onChangeView("board")}
             className={`px-3 text-xs ${
-              viewMode === "board" ? "bg-[#F5F5F5] font-medium" : ""
+              viewMode === "board"
+                ? "bg-muted font-medium"
+                : "hover:bg-accent"
             }`}
           >
             Board
@@ -176,7 +199,7 @@ export default function TaskToolbar({
         <button
           type="button"
           onClick={onAddTask}
-          className="flex h-8 items-center gap-1.5 rounded-md bg-[#171717] px-3 text-xs text-white"
+          className="flex h-8 items-center gap-1.5 rounded-md bg-primary px-3 text-xs text-primary-foreground hover:opacity-90"
         >
           <Plus className="size-3.5" />
           <span>Add Task</span>

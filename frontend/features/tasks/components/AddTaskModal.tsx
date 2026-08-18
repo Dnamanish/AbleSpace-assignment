@@ -26,7 +26,9 @@ export default function AddTaskModal({
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    if (isOpen) setStatus(defaultStatus);
+    if (isOpen) {
+      setStatus(defaultStatus);
+    }
   }, [isOpen, defaultStatus]);
 
   useEffect(() => {
@@ -63,15 +65,17 @@ export default function AddTaskModal({
     setPriority("No Priority");
     setDueDate("");
     setTags([]);
+
     onClose();
   };
 
   if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-[560px] rounded-2xl bg-white shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+      <div className="w-[560px] max-w-full overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-6 py-5">
+        <div className="flex items-center justify-between border-b border-border px-6 py-5">
           <h2 className="text-xl font-semibold">
             {editingTask ? "Edit Task" : "Add Task"}
           </h2>
@@ -79,7 +83,7 @@ export default function AddTaskModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-xl text-gray-500"
+            className="rounded-md px-2 text-xl text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             ×
           </button>
@@ -89,29 +93,36 @@ export default function AddTaskModal({
         <div className="space-y-5 p-6">
           {/* Title */}
           <div>
-            <label className="mb-2 block text-sm">Title *</label>
+            <label className="mb-2 block text-sm">
+              Title *
+            </label>
 
             <input
               type="text"
               placeholder="What needs to be done?"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-md border px-3 py-3 outline-none"
+              className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="mb-2 block text-sm">Description</label>
+            <label className="mb-2 block text-sm">
+              Description
+            </label>
 
             <textarea
               placeholder="Add a description..."
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="h-24 w-full resize-none rounded-md border px-3 py-3 outline-none"
+              onChange={(e) =>
+                setDescription(e.target.value)
+              }
+              className="h-24 w-full resize-none rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
             />
           </div>
 
+          {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {[
               "Deployment",
@@ -130,14 +141,17 @@ export default function AddTaskModal({
                 onClick={() => {
                   setTags((currentTags) =>
                     currentTags.includes(tag)
-                      ? currentTags.filter((currentTag) => currentTag !== tag)
+                      ? currentTags.filter(
+                          (currentTag) =>
+                            currentTag !== tag,
+                        )
                       : [...currentTags, tag],
                   );
                 }}
-                className={`rounded-full border px-3 py-1 text-sm ${
+                className={`rounded-full border px-3 py-1 text-sm transition ${
                   tags.includes(tag)
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
+                    ? "bg-primary text-primary-foreground"
+                    : "border-border bg-muted text-foreground hover:bg-accent"
                 }`}
               >
                 {tag}
@@ -148,12 +162,16 @@ export default function AddTaskModal({
           {/* Status + Priority */}
           <div className="grid grid-cols-2 gap-5">
             <div>
-              <label className="mb-2 block text-sm">Status</label>
+              <label className="mb-2 block text-sm">
+                Status
+              </label>
 
               <select
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full rounded-md border px-3 py-3"
+                onChange={(e) =>
+                  setStatus(e.target.value)
+                }
+                className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none focus:ring-1 focus:ring-ring"
               >
                 <option>To Do</option>
                 <option>Doing</option>
@@ -163,12 +181,16 @@ export default function AddTaskModal({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm">Priority</label>
+              <label className="mb-2 block text-sm">
+                Priority
+              </label>
 
               <select
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                className="w-full rounded-md border px-3 py-3"
+                onChange={(e) =>
+                  setPriority(e.target.value)
+                }
+                className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none focus:ring-1 focus:ring-ring"
               >
                 <option>No Priority</option>
                 <option>Low</option>
@@ -180,23 +202,27 @@ export default function AddTaskModal({
 
           {/* Due Date */}
           <div>
-            <label className="mb-2 block text-sm">Due Date</label>
+            <label className="mb-2 block text-sm">
+              Due Date
+            </label>
 
             <input
               type="date"
               value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="w-full rounded-md border px-3 py-3"
+              onChange={(e) =>
+                setDueDate(e.target.value)
+              }
+              className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none focus:ring-1 focus:ring-ring"
             />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-4 border-t px-6 py-4">
+        <div className="flex justify-end gap-4 border-t border-border px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-gray-600"
+            className="rounded-md px-4 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             Cancel
           </button>
@@ -204,7 +230,7 @@ export default function AddTaskModal({
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-lg bg-black px-5 py-2 text-sm text-white"
+            className="rounded-lg bg-primary px-5 py-2 text-sm text-primary-foreground hover:opacity-90"
           >
             {editingTask ? "Save Changes" : "Add Task"}
           </button>

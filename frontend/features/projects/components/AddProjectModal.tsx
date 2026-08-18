@@ -62,9 +62,9 @@ export default function AddProjectModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-[500px] rounded-2xl bg-white shadow-xl">
+      <div className="w-[500px] rounded-2xl border border-border bg-background text-foreground shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-6 py-5">
+        <div className="flex items-center justify-between border-b border-border px-6 py-5">
           <h2 className="text-xl font-semibold">
             {editingProject ? "Edit Project" : "Add Project"}
           </h2>
@@ -72,7 +72,7 @@ export default function AddProjectModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-xl text-gray-500"
+            className="text-xl text-muted-foreground hover:text-foreground"
           >
             ×
           </button>
@@ -82,26 +82,30 @@ export default function AddProjectModal({
         <div className="space-y-5 p-6">
           {/* Name */}
           <div>
-            <label className="mb-2 block text-sm">Project Name *</label>
+            <label className="mb-2 block text-sm">
+              Project Name *
+            </label>
 
             <input
               type="text"
               placeholder="Enter project name..."
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-md border px-3 py-3 outline-none"
+              className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
             />
           </div>
 
           {/* Priority + Lead */}
           <div className="grid grid-cols-2 gap-5">
             <div>
-              <label className="mb-2 block text-sm">Priority</label>
+              <label className="mb-2 block text-sm">
+                Priority
+              </label>
 
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full rounded-md border px-3 py-3"
+                className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
               >
                 <option>No Priority</option>
                 <option>Low</option>
@@ -111,12 +115,14 @@ export default function AddProjectModal({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm">Lead</label>
+              <label className="mb-2 block text-sm">
+                Lead
+              </label>
 
               <select
                 value={lead}
                 onChange={(e) => setLead(e.target.value)}
-                className="w-full rounded-md border px-3 py-3"
+                className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
               >
                 <option>Admin</option>
                 <option>CN</option>
@@ -126,23 +132,25 @@ export default function AddProjectModal({
 
           {/* Due Date */}
           <div>
-            <label className="mb-2 block text-sm">Due Date</label>
+            <label className="mb-2 block text-sm">
+              Due Date
+            </label>
 
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full rounded-md border px-3 py-3"
+              className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
             />
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-4 border-t px-6 py-4">
+        <div className="flex justify-end gap-4 border-t border-border px-6 py-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-gray-600"
+            className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
           >
             Cancel
           </button>
@@ -150,7 +158,7 @@ export default function AddProjectModal({
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-lg bg-black px-5 py-2 text-sm text-white"
+            className="rounded-lg bg-primary px-5 py-2 text-sm text-primary-foreground hover:opacity-90"
           >
             {editingProject ? "Save Changes" : "Add Project"}
           </button>
