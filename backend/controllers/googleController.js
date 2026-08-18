@@ -95,6 +95,8 @@ const getCurrentUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        title: user.title,
+        username: user.username,
       },
     });
   } catch (error) {
@@ -102,6 +104,51 @@ const getCurrentUser = async (req, res) => {
 
     return res.status(500).json({
       message: "Failed to get current user",
+    });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  try {
+    const { name, title, username } = req.body;
+
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (name !== undefined) {
+      user.name = name.trim();
+    }
+
+    if (title !== undefined) {
+      user.title = title.trim();
+    }
+
+    if (username !== undefined) {
+      user.username = username.trim();
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        title: user.title,
+        username: user.username,
+      },
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+
+    return res.status(500).json({
+      message: "Failed to update profile",
     });
   }
 };
@@ -122,5 +169,6 @@ const logout = (req, res) => {
 module.exports = {
   googleLogin,
   getCurrentUser,
+  updateProfile,
   logout,
 };
