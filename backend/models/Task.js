@@ -1,5 +1,34 @@
 const mongoose = require("mongoose");
 
+const activitySchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: [
+        "status",
+        "priority",
+        "date",
+        "labels",
+        "comment",
+      ],
+      required: true,
+    },
+
+    message: {
+      type: String,
+      required: true,
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    _id: true,
+  },
+);
+
 const taskSchema = new mongoose.Schema(
   {
     title: {
@@ -35,14 +64,29 @@ const taskSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["To Do", "Doing", "Completed", "On Hold"],
+      enum: [
+        "To Do",
+        "Doing",
+        "Completed",
+        "On Hold",
+      ],
       default: "To Do",
     },
 
     priority: {
       type: String,
-      enum: ["No Priority", "Low", "Medium", "High"],
+      enum: [
+        "No Priority",
+        "Low",
+        "Medium",
+        "High",
+      ],
       default: "No Priority",
+    },
+
+    activities: {
+      type: [activitySchema],
+      default: [],
     },
 
     userId: {
