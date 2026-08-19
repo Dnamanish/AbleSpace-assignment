@@ -29,8 +29,10 @@ export default function TaskDetailPage() {
     updateTask,
   } = useTasks();
 
-  const [comment, setComment] =
-    useState("");
+  const [comment, setComment] = useState("");
+
+  const [isLocked, setIsLocked] = useState(false);
+  const [isShared, setIsShared] = useState(false);
 
   const [
     isCalendarOpen,
@@ -93,6 +95,28 @@ export default function TaskDetailPage() {
       setCalendarDate(date);
     }
   }, [task?.dueDate]);
+
+  /*
+   * Share task
+   */
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        window.location.href,
+      );
+
+      setIsShared(true);
+
+      setTimeout(() => {
+        setIsShared(false);
+      }, 2000);
+    } catch (error) {
+      console.error(
+        "Failed to copy task link:",
+        error,
+      );
+    }
+  };
 
   if (!task) {
     return (
@@ -271,15 +295,32 @@ export default function TaskDetailPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Lock */}
           <button
             type="button"
-            className="flex size-9 items-center justify-center rounded-md border border-border hover:bg-muted"
+            onClick={() =>
+              setIsLocked(
+                (current) => !current,
+              )
+            }
+            aria-label={
+              isLocked
+                ? "Unlock task"
+                : "Lock task"
+            }
+            className={`flex size-9 items-center justify-center rounded-md border border-border transition ${
+              isLocked
+                ? "bg-muted"
+                : "hover:bg-muted"
+            }`}
           >
             <Lock className="size-4" />
           </button>
 
+          {/* Eye */}
           <button
             type="button"
+            aria-label="Task views"
             className="flex size-9 items-center justify-center gap-1 rounded-md border border-border hover:bg-muted"
           >
             <Eye className="size-4" />
@@ -289,13 +330,23 @@ export default function TaskDetailPage() {
             </span>
           </button>
 
+          {/* Share */}
           <button
             type="button"
+            onClick={handleShare}
+            aria-label="Share task"
             className="flex size-9 items-center justify-center rounded-md border border-border hover:bg-muted"
           >
-            <Share2 className="size-4" />
+            {isShared ? (
+              <span className="text-[10px] font-medium">
+                Copied
+              </span>
+            ) : (
+              <Share2 className="size-4" />
+            )}
           </button>
 
+          {/* More - unchanged */}
           <button
             type="button"
             className="flex size-9 items-center justify-center rounded-md border border-border hover:bg-muted"
@@ -625,10 +676,7 @@ export default function TaskDetailPage() {
                 </span>
               </div>
 
-              {/* ================================================= */}
-              {/* DATE */}
-              {/* ================================================= */}
-
+              {/* Date */}
               <div className="relative">
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">
@@ -651,7 +699,7 @@ export default function TaskDetailPage() {
                   </button>
                 </div>
 
-                {/* CALENDAR */}
+                {/* Calendar */}
                 {isCalendarOpen && (
                   <div className="absolute right-0 top-9 z-[100] w-[280px] rounded-xl border border-border bg-background p-4 shadow-xl">
                     <div className="mb-4 flex items-center justify-between">
