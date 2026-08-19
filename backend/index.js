@@ -28,6 +28,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/projects", projectRoutes);
 
+// just to keep backend running nothing to do with project
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+  });
+});
+
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
