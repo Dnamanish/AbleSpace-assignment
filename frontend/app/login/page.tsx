@@ -82,6 +82,11 @@ export default function LoginPage() {
                 onError={() => {
                   alert("Google login failed");
                 }}
+                theme="outline"
+                shape="pill"
+                size="large"
+                text="signin_with"
+                width="256"
               />
             </div>
           </div>

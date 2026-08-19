@@ -1,6 +1,5 @@
 "use client";
-
-import { CalendarDays, MoreHorizontal, Tag } from "lucide-react";
+import { CalendarDays, MoreHorizontal, Tag, ChevronDown } from "lucide-react";
 import type { Task } from "../types";
 
 type TaskListProps = {
@@ -46,9 +45,7 @@ export default function TaskList({
   return (
     <div className="mt-4 space-y-4">
       {columns.map((column) => {
-        const columnTasks = tasks.filter(
-          (task) => task.status === column,
-        );
+        const columnTasks = tasks.filter((task) => task.status === column);
 
         return (
           <div
@@ -57,11 +54,9 @@ export default function TaskList({
           >
             {/* Status */}
             <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2">
-              <span className="text-xs">⌄</span>
+              <ChevronDown className="size-3.5" />
 
-              <h2 className="text-xs font-semibold">
-                {column}
-              </h2>
+              <h2 className="text-xs font-semibold">{column}</h2>
             </div>
 
             {/* Header */}
@@ -93,9 +88,7 @@ export default function TaskList({
               >
                 {/* Task + Labels */}
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="truncate">
-                    {task.title}
-                  </span>
+                  <span className="truncate">{task.title}</span>
 
                   {showLabels && task.tags.length > 0 && (
                     <div className="flex shrink-0 gap-1">
@@ -119,9 +112,7 @@ export default function TaskList({
 
                 {/* Members */}
                 {showMembers && (
-                  <span className="text-sm">
-                    {task.assignee}
-                  </span>
+                  <span className="text-sm">{task.assignee}</span>
                 )}
 
                 {/* Due Date */}
