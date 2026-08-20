@@ -55,11 +55,14 @@ const googleLogin = async (req, res) => {
       },
     );
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     res.cookie("auth-token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
     });
 
     return res.status(200).json({
@@ -154,10 +157,12 @@ const updateProfile = async (req, res) => {
 };
 
 const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.clearCookie("auth-token", {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
   });
 
