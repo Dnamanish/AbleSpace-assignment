@@ -26,8 +26,7 @@ export default function Sidebar() {
     "theme" | "color" | null
   >(null);
 
-  const [selectedColor, setSelectedColor] =
-    useState("Blue");
+  const [selectedColor, setSelectedColor] = useState("Blue");
 
   const { theme, setTheme } = useTheme();
 
@@ -36,9 +35,7 @@ export default function Sidebar() {
     setOpenSubmenu(null);
   };
 
-  const toggleSubmenu = (
-    menu: "theme" | "color",
-  ) => {
+  const toggleSubmenu = (menu: "theme" | "color") => {
     setOpenSubmenu((current) =>
       current === menu ? null : menu,
     );
@@ -52,14 +49,17 @@ export default function Sidebar() {
         min-h-screen
         shrink-0
         flex-col
-        overflow-hidden
         border-r
         border-border
         bg-background
         transition-[width]
         duration-200
         ease-in-out
-        ${sidebarOpen ? "w-[256px]" : "w-0"}
+        ${
+          sidebarOpen
+            ? "w-[256px] overflow-visible"
+            : "w-0 overflow-hidden"
+        }
       `}
     >
       {/* Sidebar content */}
@@ -126,6 +126,7 @@ export default function Sidebar() {
               className="mt-2 flex items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
             >
               <User className="size-4" />
+
               <span>Profile</span>
             </Link>
 
@@ -133,9 +134,7 @@ export default function Sidebar() {
             <div className="relative">
               <button
                 type="button"
-                onClick={() =>
-                  toggleSubmenu("theme")
-                }
+                onClick={() => toggleSubmenu("theme")}
                 className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-muted"
               >
                 <div className="flex items-center gap-3">
@@ -149,7 +148,7 @@ export default function Sidebar() {
 
               {/* Theme Submenu */}
               {openSubmenu === "theme" && (
-                <div className="absolute left-[238px] top-0 z-50 w-44 rounded-lg border border-border bg-background p-2 shadow-lg">
+                <div className="absolute left-[238px] top-0 z-[60] w-44 rounded-lg border border-border bg-background p-2 shadow-lg">
                   <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
                     Theme
                   </p>
@@ -157,9 +156,7 @@ export default function Sidebar() {
                   {/* Light */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setTheme("light")
-                    }
+                    onClick={() => setTheme("light")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span>Light</span>
@@ -172,9 +169,7 @@ export default function Sidebar() {
                   {/* Dark */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setTheme("dark")
-                    }
+                    onClick={() => setTheme("dark")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span>Dark</span>
@@ -187,9 +182,7 @@ export default function Sidebar() {
                   {/* System */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setTheme("system")
-                    }
+                    onClick={() => setTheme("system")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span>System</span>
@@ -206,9 +199,7 @@ export default function Sidebar() {
             <div className="relative">
               <button
                 type="button"
-                onClick={() =>
-                  toggleSubmenu("color")
-                }
+                onClick={() => toggleSubmenu("color")}
                 className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-muted"
               >
                 <div className="flex items-center gap-3">
@@ -222,7 +213,7 @@ export default function Sidebar() {
 
               {/* Color Submenu */}
               {openSubmenu === "color" && (
-                <div className="absolute left-[238px] top-0 z-50 w-44 rounded-lg border border-border bg-background p-2 shadow-lg">
+                <div className="absolute left-[238px] top-0 z-[60] w-44 rounded-lg border border-border bg-background p-2 shadow-lg">
                   <p className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
                     Color Mode
                   </p>
@@ -230,9 +221,7 @@ export default function Sidebar() {
                   {/* Amber */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor("Amber")
-                    }
+                    onClick={() => setSelectedColor("Amber")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -240,8 +229,7 @@ export default function Sidebar() {
                       Amber
                     </span>
 
-                    {selectedColor ===
-                      "Amber" && (
+                    {selectedColor === "Amber" && (
                       <Check className="size-4" />
                     )}
                   </button>
@@ -249,9 +237,7 @@ export default function Sidebar() {
                   {/* Blue */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor("Blue")
-                    }
+                    onClick={() => setSelectedColor("Blue")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -259,8 +245,7 @@ export default function Sidebar() {
                       Blue
                     </span>
 
-                    {selectedColor ===
-                      "Blue" && (
+                    {selectedColor === "Blue" && (
                       <Check className="size-4" />
                     )}
                   </button>
@@ -268,9 +253,7 @@ export default function Sidebar() {
                   {/* Pink */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor("Pink")
-                    }
+                    onClick={() => setSelectedColor("Pink")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -278,8 +261,7 @@ export default function Sidebar() {
                       Pink
                     </span>
 
-                    {selectedColor ===
-                      "Pink" && (
+                    {selectedColor === "Pink" && (
                       <Check className="size-4" />
                     )}
                   </button>
@@ -287,9 +269,7 @@ export default function Sidebar() {
                   {/* Rose */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor("Rose")
-                    }
+                    onClick={() => setSelectedColor("Rose")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -297,8 +277,7 @@ export default function Sidebar() {
                       Rose
                     </span>
 
-                    {selectedColor ===
-                      "Rose" && (
+                    {selectedColor === "Rose" && (
                       <Check className="size-4" />
                     )}
                   </button>
@@ -306,11 +285,7 @@ export default function Sidebar() {
                   {/* Emerald */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor(
-                        "Emerald",
-                      )
-                    }
+                    onClick={() => setSelectedColor("Emerald")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -318,8 +293,7 @@ export default function Sidebar() {
                       Emerald
                     </span>
 
-                    {selectedColor ===
-                      "Emerald" && (
+                    {selectedColor === "Emerald" && (
                       <Check className="size-4" />
                     )}
                   </button>
@@ -327,9 +301,7 @@ export default function Sidebar() {
                   {/* Black */}
                   <button
                     type="button"
-                    onClick={() =>
-                      setSelectedColor("Black")
-                    }
+                    onClick={() => setSelectedColor("Black")}
                     className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm hover:bg-muted"
                   >
                     <span className="flex items-center gap-2">
@@ -337,8 +309,7 @@ export default function Sidebar() {
                       Black
                     </span>
 
-                    {selectedColor ===
-                      "Black" && (
+                    {selectedColor === "Black" && (
                       <Check className="size-4" />
                     )}
                   </button>

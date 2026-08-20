@@ -21,7 +21,8 @@ export function ThemeProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [theme, setThemeState] = useState<Theme>("system");
+  // Light is the default theme.
+  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as Theme | null;
