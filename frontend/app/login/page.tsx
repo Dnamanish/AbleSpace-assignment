@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { Pyramid } from "lucide-react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -13,7 +16,9 @@ export default function LoginPage() {
   };
 
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+    >
       <main className="flex min-h-screen items-center justify-center bg-white px-4">
         <div className="flex w-full max-w-[1280px] flex-col items-center">
           {/* Logo */}
@@ -22,7 +27,9 @@ export default function LoginPage() {
               <Pyramid className="size-3 text-white" />
             </div>
 
-            <span className="text-xs font-medium text-[#171717]">Pyramid</span>
+            <span className="text-xs font-medium text-[#171717]">
+              Pyramid
+            </span>
           </div>
 
           {/* Login Card */}
@@ -54,7 +61,7 @@ export default function LoginPage() {
                 onSuccess={async (credentialResponse) => {
                   try {
                     const response = await fetch(
-                      "http://localhost:5000/api/auth/google",
+                      `${API_URL}/api/auth/google`,
                       {
                         method: "POST",
                         headers: {
@@ -70,7 +77,9 @@ export default function LoginPage() {
                     const data = await response.json();
 
                     if (!response.ok) {
-                      throw new Error(data.message || "Google login failed");
+                      throw new Error(
+                        data.message || "Google login failed",
+                      );
                     }
 
                     router.push("/tasks");

@@ -1,11 +1,17 @@
 "use client";
-import { CalendarDays, MoreHorizontal, Tag, ChevronDown } from "lucide-react";
+
+import {
+  CalendarDays,
+  MoreHorizontal,
+  Tag,
+  ChevronDown,
+} from "lucide-react";
 import type { Task } from "../types";
 
 type TaskListProps = {
   tasks: Task[];
   onAddTask: (status: string) => void;
-  onDeleteTask: (id: number) => void;
+  onDeleteTask: (id: string) => void;
   onEditTask: (task: Task) => void;
   showMembers: boolean;
   showDueDate: boolean;
@@ -45,7 +51,9 @@ export default function TaskList({
   return (
     <div className="mt-4 space-y-4">
       {columns.map((column) => {
-        const columnTasks = tasks.filter((task) => task.status === column);
+        const columnTasks = tasks.filter(
+          (task) => task.status === column,
+        );
 
         return (
           <div
@@ -56,7 +64,9 @@ export default function TaskList({
             <div className="flex items-center gap-2 border-b border-border bg-card px-3 py-2">
               <ChevronDown className="size-3.5" />
 
-              <h2 className="text-xs font-semibold">{column}</h2>
+              <h2 className="text-xs font-semibold">
+                {column}
+              </h2>
             </div>
 
             {/* Header */}
@@ -68,10 +78,16 @@ export default function TaskList({
               }`}
             >
               <span>Task</span>
+
               <span>Priority</span>
 
-              {showMembers && <span>Members</span>}
-              {showDueDate && <span>Due Date</span>}
+              {showMembers && (
+                <span>Members</span>
+              )}
+
+              {showDueDate && (
+                <span>Due Date</span>
+              )}
 
               <span>Actions</span>
             </div>
@@ -88,37 +104,50 @@ export default function TaskList({
               >
                 {/* Task + Labels */}
                 <div className="flex min-w-0 items-center gap-2">
-                  <span className="truncate">{task.title}</span>
+                  <span className="truncate">
+                    {task.title}
+                  </span>
 
-                  {showLabels && task.tags.length > 0 && (
-                    <div className="flex shrink-0 gap-1">
-                      {task.tags.map((tag, index) => (
-                        <span
-                          key={`${tag}-${index}`}
-                          className="flex items-center gap-1 whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
-                        >
-                          <Tag className="size-3" />
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  {showLabels &&
+                    task.tags.length > 0 && (
+                      <div className="flex shrink-0 gap-1">
+                        {task.tags.map(
+                          (tag, index) => (
+                            <span
+                              key={`${tag}-${index}`}
+                              className="flex items-center gap-1 whitespace-nowrap rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                            >
+                              <Tag className="size-3" />
+
+                              {tag}
+                            </span>
+                          ),
+                        )}
+                      </div>
+                    )}
                 </div>
 
                 {/* Priority */}
-                <span className={getPriorityStyle(task.priority)}>
+                <span
+                  className={getPriorityStyle(
+                    task.priority,
+                  )}
+                >
                   {task.priority}
                 </span>
 
                 {/* Members */}
                 {showMembers && (
-                  <span className="text-sm">{task.assignee}</span>
+                  <span className="text-sm">
+                    {task.assignee}
+                  </span>
                 )}
 
                 {/* Due Date */}
                 {showDueDate && (
                   <span className="flex items-center gap-1">
                     <CalendarDays className="size-3.5" />
+
                     {task.date}
                   </span>
                 )}
@@ -128,7 +157,9 @@ export default function TaskList({
                   <button
                     type="button"
                     className="flex size-6 items-center justify-center rounded hover:bg-accent"
-                    onClick={() => onEditTask(task)}
+                    onClick={() =>
+                      onEditTask(task)
+                    }
                   >
                     <MoreHorizontal className="size-4" />
                   </button>
@@ -139,10 +170,15 @@ export default function TaskList({
             {/* Add Task */}
             <button
               type="button"
-              onClick={() => onAddTask(column)}
+              onClick={() =>
+                onAddTask(column)
+              }
               className="flex w-full items-center gap-2 border-t border-border px-3 py-2 text-xs hover:bg-accent"
             >
-              <span className="text-base">+</span>
+              <span className="text-base">
+                +
+              </span>
+
               Add Task
             </button>
           </div>

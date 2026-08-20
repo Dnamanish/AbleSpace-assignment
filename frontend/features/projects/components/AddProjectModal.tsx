@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Project } from "../types";
+import type { Project } from "../type";
 
 type AddProjectModalProps = {
   isOpen: boolean;
@@ -41,7 +41,9 @@ export default function AddProjectModal({
     if (!name.trim()) return;
 
     const project: Project = {
-      id: editingProject ? editingProject.id : Date.now(),
+      id: editingProject
+        ? editingProject.id
+        : String(Date.now()),
       name: name.trim(),
       priority,
       lead,
@@ -66,7 +68,9 @@ export default function AddProjectModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-5">
           <h2 className="text-xl font-semibold">
-            {editingProject ? "Edit Project" : "Add Project"}
+            {editingProject
+              ? "Edit Project"
+              : "Add Project"}
           </h2>
 
           <button
@@ -90,7 +94,9 @@ export default function AddProjectModal({
               type="text"
               placeholder="Enter project name..."
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
               className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
             />
           </div>
@@ -104,7 +110,9 @@ export default function AddProjectModal({
 
               <select
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}
+                onChange={(e) =>
+                  setPriority(e.target.value)
+                }
                 className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
               >
                 <option>No Priority</option>
@@ -121,7 +129,9 @@ export default function AddProjectModal({
 
               <select
                 value={lead}
-                onChange={(e) => setLead(e.target.value)}
+                onChange={(e) =>
+                  setLead(e.target.value)
+                }
                 className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
               >
                 <option>Admin</option>
@@ -139,7 +149,9 @@ export default function AddProjectModal({
             <input
               type="date"
               value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
+              onChange={(e) =>
+                setDueDate(e.target.value)
+              }
               className="w-full rounded-md border border-input bg-background px-3 py-3 text-foreground outline-none"
             />
           </div>
@@ -160,7 +172,9 @@ export default function AddProjectModal({
             onClick={handleSubmit}
             className="rounded-lg bg-primary px-5 py-2 text-sm text-primary-foreground hover:opacity-90"
           >
-            {editingProject ? "Save Changes" : "Add Project"}
+            {editingProject
+              ? "Save Changes"
+              : "Add Project"}
           </button>
         </div>
       </div>

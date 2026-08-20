@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileSidebar from "./components/ProfileSidebar";
 
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
 type User = {
   id: string;
   name: string;
@@ -30,7 +33,7 @@ export default function ProfilePage() {
     const loadUser = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/auth/me",
+          `${API_URL}/api/auth/me`,
           {
             credentials: "include",
           },
@@ -69,7 +72,7 @@ export default function ProfilePage() {
       setMessage("");
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/profile",
+        `${API_URL}/api/auth/profile`,
         {
           method: "PUT",
           credentials: "include",
@@ -112,7 +115,7 @@ export default function ProfilePage() {
       setLoggingOut(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/auth/logout",
+        `${API_URL}/api/auth/logout`,
         {
           method: "POST",
           credentials: "include",

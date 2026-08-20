@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Task } from "../types";
+import type { Task } from "../types";
 
 type AddTaskModalProps = {
   isOpen: boolean;
@@ -44,18 +44,36 @@ export default function AddTaskModal({
 
   const handleSubmit = () => {
     const savedTask: Task = {
-      id: editingTask ? editingTask.id : Date.now(),
+      id: editingTask
+        ? editingTask.id
+        : String(Date.now()),
+
       title,
+
       description,
-      assignee: editingTask ? editingTask.assignee : "Admin",
-      date: new Date(dueDate).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-      }),
+
+      assignee: editingTask
+        ? editingTask.assignee
+        : "Admin",
+
+      date: dueDate
+        ? new Date(dueDate).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+          })
+        : "",
+
       dueDate,
+
       tags,
+
       status,
+
       priority,
+
+      activities: editingTask
+        ? editingTask.activities
+        : [],
     };
 
     onSaveTask(savedTask);

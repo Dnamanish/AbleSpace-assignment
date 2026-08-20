@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import type { Project } from "./types";
+import type { Project } from "./type";
 
 type ProjectContextType = {
   projects: Project[];
@@ -11,7 +11,8 @@ type ProjectContextType = {
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
 
-const API_URL = "http://localhost:5000/api/projects";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export function ProjectProvider({
   children,
@@ -23,7 +24,7 @@ export function ProjectProvider({
   useEffect(() => {
     const loadProjects = async () => {
       try {
-        const response = await fetch(API_URL, {
+        const response = await fetch(`${API_URL}/api/projects`, {
           credentials: "include",
         });
 
@@ -49,14 +50,17 @@ export function ProjectProvider({
       );
 
       if (exists) {
-        const response = await fetch(`${API_URL}/${project.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${API_URL}/api/projects/${project.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(project),
           },
-          credentials: "include",
-          body: JSON.stringify(project),
-        });
+        );
 
         if (!response.ok) {
           throw new Error("Failed to update project");
@@ -75,14 +79,17 @@ export function ProjectProvider({
         return;
       }
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${API_URL}/api/projects`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(project),
         },
-        credentials: "include",
-        body: JSON.stringify(project),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create project");
@@ -101,17 +108,22 @@ export function ProjectProvider({
 
   const deleteProject = async (id: string) => {
     try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${API_URL}/api/projects/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
 
       if (!response.ok) {
         throw new Error("Failed to delete project");
       }
 
       setProjects((currentProjects) =>
-        currentProjects.filter((project) => project.id !== id),
+        currentProjects.filter(
+          (project) => project.id !== id,
+        ),
       );
     } catch (error) {
       console.error("Failed to delete project:", error);
@@ -135,7 +147,9 @@ export function useProjects() {
   const context = useContext(ProjectContext);
 
   if (!context) {
-    throw new Error("useProjects must be used inside ProjectProvider");
+    throw new Error(
+      "useProjects must be used inside ProjectProvider",
+    );
   }
 
   return context;
