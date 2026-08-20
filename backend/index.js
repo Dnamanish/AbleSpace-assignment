@@ -8,12 +8,27 @@ dotenv.config();
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://able-space-assignment-three.vercel.app",
+];
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: function (origin, callback) {
+      // Allow requests with no origin, such as Postman/server-to-server requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
-  }),
+  })
 );
 
 app.use(express.json());
@@ -23,12 +38,11 @@ const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 
-
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/projects", projectRoutes);
 
-// just to keep backend running nothing to do with project
+// Just to keep backend running
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
@@ -47,7 +61,7 @@ mongoose
     console.log("MongoDB connected");
 
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
